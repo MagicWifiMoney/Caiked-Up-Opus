@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { motion, useScroll, useTransform, useInView } from "motion/react";
 import Image from "next/image";
 import { Sparkles, Users, Music, Heart } from "lucide-react";
+import { ScrambleText } from "./scramble-text";
 
 const stats = [
   { icon: Music, value: "50+", label: "Events", color: "#00f0ff" },
@@ -333,7 +334,7 @@ export function About() {
             The Artist
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-black mt-4 tracking-tight">
-            Meet <span className="text-gradient-neon">Caikin</span>
+            Meet <ScrambleText text="Caikin" className="text-gradient-neon" />
           </h2>
         </motion.div>
 

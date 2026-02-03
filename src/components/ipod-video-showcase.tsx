@@ -1,42 +1,35 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform, useInView } from "motion/react";
-import Image from "next/image";
 
-// iPod Nano video content - using images as placeholders until videos are added
-// To add videos: place .mp4 files in /public/videos/ and update the src paths
 const ipodContent = [
   {
     id: 1,
     title: "The Armory",
     color: "#00f0ff", // Cyan
-    // video: "/videos/Armory.mp4", // Uncomment when video is available
-    image: "/images/Armory Solo.JPG",
+    video: "/videos/Armory.MOV",
     glowColor: "rgba(0, 240, 255, 0.6)",
   },
   {
     id: 2,
     title: "JAUZ Support",
     color: "#ff00ff", // Magenta
-    // video: "/videos/Jauz.mp4",
-    image: "/images/Jauz Keep.JPG",
+    video: "/videos/Jauz.MOV",
     glowColor: "rgba(255, 0, 255, 0.6)",
   },
   {
     id: 3,
     title: "Festival Energy",
     color: "#8b00ff", // Purple
-    // video: "/videos/EDC.mp4",
-    image: "/images/Breakaway2.JPG",
+    video: "/videos/EDC EM Head Bang.MOV",
     glowColor: "rgba(139, 0, 255, 0.6)",
   },
   {
     id: 4,
     title: "Live Sets",
     color: "#00ff88", // Green
-    // video: "/videos/Armory2.mp4",
-    image: "/images/Boombox Keep.JPG",
+    video: "/videos/Armory2.MOV",
     glowColor: "rgba(0, 255, 136, 0.6)",
   },
 ];
@@ -49,11 +42,29 @@ function IPodNano({
   index: number;
 }) {
   const ipodRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(ipodRef, { once: true, margin: "-100px" });
+  const [isHovered, setIsHovered] = useState(false);
 
   // Stagger rotation for visual interest
   const rotations = [-8, 5, -5, 8];
   const rotation = rotations[index % rotations.length];
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay might be blocked, that's ok
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  };
 
   return (
     <motion.div
@@ -67,6 +78,8 @@ function IPodNano({
         y: -20,
         transition: { duration: 0.4 }
       }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className="relative group"
       style={{ perspective: "1000px" }}
     >
@@ -87,25 +100,28 @@ function IPodNano({
 
           {/* Screen bezel */}
           <div className="absolute top-4 left-3 right-3 md:top-5 md:left-4 md:right-4 h-[55%] rounded-[8px] md:rounded-[10px] bg-black overflow-hidden border border-white/10">
-            {/* Screen content - Video or Image */}
-            <div className="relative w-full h-full">
-              {item.image && (
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-              )}
+            {/* Screen content - Video */}
+            <div className="relative w-full h-full bg-black">
+              <video
+                ref={videoRef}
+                src={item.video}
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{
+                  transform: isHovered ? 'scale(1.1)' : 'scale(1)',
+                  transition: 'transform 0.7s ease'
+                }}
+              />
 
               {/* Screen reflection */}
               <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
 
               {/* Play indicator overlay */}
               <motion.div
-                initial={{ opacity: 0 }}
-                whileHover={{ opacity: 1 }}
-                className="absolute inset-0 flex items-center justify-center bg-black/30"
+                animate={{ opacity: isHovered ? 0 : 1 }}
+                className="absolute inset-0 flex items-center justify-center bg-black/40"
               >
                 <motion.div
                   animate={{ scale: [1, 1.1, 1] }}
@@ -223,7 +239,7 @@ export function IPodVideoShowcase() {
             <span className="text-gradient-neon">Now Playing</span>
           </h2>
           <p className="mt-4 md:mt-6 text-base md:text-lg text-white/50 max-w-2xl mx-auto">
-            Catch the energy from live sets and performances
+            Hover to catch the energy from live sets and performances
           </p>
         </motion.div>
 
