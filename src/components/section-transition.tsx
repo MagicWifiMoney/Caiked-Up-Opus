@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 
 interface SectionTransitionProps {
@@ -9,12 +9,56 @@ interface SectionTransitionProps {
   variant?: "wave" | "diagonal" | "dots" | "laser";
 }
 
+// Pride rainbow colors
+const prideColors = ["#E40303", "#FF8C00", "#FFED00", "#008026", "#24408E", "#732982"];
+
+function PrideEasterEgg({ isVisible }: { isVisible: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{
+        opacity: isVisible ? 1 : 0,
+        scale: isVisible ? 1 : 0.5,
+      }}
+      transition={{ duration: 0.5, ease: "backOut" }}
+      className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
+    >
+      <div className="flex flex-col gap-1">
+        {prideColors.map((color, i) => (
+          <motion.div
+            key={color}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: isVisible ? 1 : 0 }}
+            transition={{ delay: i * 0.05, duration: 0.3 }}
+            className="h-2 md:h-3 w-32 md:w-48 rounded-full origin-left"
+            style={{
+              backgroundColor: color,
+              boxShadow: `0 0 15px ${color}80`,
+            }}
+          />
+        ))}
+      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isVisible ? 1 : 0 }}
+        transition={{ delay: 0.4 }}
+        className="absolute -bottom-8 text-xs text-white/60 font-medium"
+      >
+        🏳️‍🌈 Love is love 🏳️‍🌈
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export function SectionTransition({
   fromColor = "#0a0a0f",
   toColor = "#0a0a0f",
   variant = "wave",
 }: SectionTransitionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [showPride, setShowPride] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
@@ -22,6 +66,19 @@ export function SectionTransition({
 
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0]);
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+
+  // Secret: click 3 times to reveal pride flag
+  const handleSecretClick = () => {
+    const newCount = clickCount + 1;
+    setClickCount(newCount);
+    if (newCount >= 3) {
+      setShowPride(true);
+      setTimeout(() => {
+        setShowPride(false);
+        setClickCount(0);
+      }, 4000);
+    }
+  };
 
   if (variant === "wave") {
     return (
@@ -78,9 +135,11 @@ export function SectionTransition({
     return (
       <div
         ref={containerRef}
-        className="relative h-24 overflow-hidden"
+        onClick={handleSecretClick}
+        className="relative h-24 overflow-hidden cursor-pointer"
         style={{ background: fromColor }}
       >
+        <PrideEasterEgg isVisible={showPride} />
         <motion.div style={{ opacity }} className="absolute inset-0 flex items-center justify-center gap-8">
           {[...Array(20)].map((_, i) => (
             <motion.div
@@ -96,7 +155,7 @@ export function SectionTransition({
               }}
               className="w-2 h-2 rounded-full"
               style={{
-                background: i % 2 === 0 ? "#00f0ff" : "#ff00ff",
+                background: showPride ? prideColors[i % prideColors.length] : (i % 2 === 0 ? "#00f0ff" : "#ff00ff"),
               }}
             />
           ))}

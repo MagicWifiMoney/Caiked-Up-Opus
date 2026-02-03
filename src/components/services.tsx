@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform, useInView } from "motion/react";
 import Image from "next/image";
 import { Music2, Heart, Building2, Mic2 } from "lucide-react";
@@ -15,6 +15,7 @@ const services = [
     image: "/images/Sidepiece Good.JPG",
     color: "#00f0ff",
     venues: ["The Armory", "The Fillmore", "Breakaway Festival", "The Vault"],
+    imagePosition: "center 20%",
   },
   {
     id: "weddings",
@@ -25,6 +26,7 @@ const services = [
     image: "/images/J Worra.JPG",
     color: "#ff00ff",
     venues: ["Custom song selection", "MC services", "Sound equipment", "Lighting options"],
+    imagePosition: "center 35%", // Lower to show her face
   },
   {
     id: "corporate",
@@ -35,6 +37,7 @@ const services = [
     image: "/images/Twins.JPG",
     color: "#8b00ff",
     venues: ["Lifetime Fitness", "Twins Stadium", "Allianz Field", "Brand activations"],
+    imagePosition: "center 20%",
   },
   {
     id: "support",
@@ -45,6 +48,7 @@ const services = [
     image: "/images/Jauz Keep.JPG",
     color: "#ff6b35",
     venues: ["Seven Lions", "JAUZ", "SIDEPIECE", "J. Worra"],
+    imagePosition: "center 20%",
   },
 ];
 
@@ -77,7 +81,8 @@ function ServiceCard({
             src={service.image}
             alt={service.title}
             fill
-            className="object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-110"
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            style={{ objectPosition: service.imagePosition }}
             sizes="(max-width: 768px) 100vw, 50vw"
             priority={index < 2}
           />
@@ -139,8 +144,47 @@ function ServiceCard({
   );
 }
 
+// Comic speech bubble component
+function ComicBubble({ isVisible }: { isVisible: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8, y: 10 }}
+      animate={{
+        opacity: isVisible ? 1 : 0,
+        scale: isVisible ? 1 : 0.8,
+        y: isVisible ? 0 : 10
+      }}
+      transition={{ duration: 0.3, ease: "backOut" }}
+      className="absolute -right-4 top-0 md:-right-8 md:-top-2 z-10 pointer-events-none"
+    >
+      <div className="relative">
+        {/* Speech bubble */}
+        <div
+          className="bg-white text-black px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-[10px] md:text-xs font-bold whitespace-nowrap"
+          style={{
+            boxShadow: "0 4px 15px rgba(0,0,0,0.3)",
+          }}
+        >
+          Other than bring all the vibes ✨
+        </div>
+        {/* Bubble tail */}
+        <div
+          className="absolute -bottom-2 left-4 w-0 h-0"
+          style={{
+            borderLeft: "8px solid transparent",
+            borderRight: "8px solid transparent",
+            borderTop: "10px solid white",
+          }}
+        />
+      </div>
+    </motion.div>
+  );
+}
+
 export function Services() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isHoveringTitle, setIsHoveringTitle] = useState(false);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
@@ -174,9 +218,16 @@ export function Services() {
           viewport={{ once: true }}
           className="text-center mb-12 md:mb-20"
         >
-          <span className="text-sm font-medium tracking-[0.3em] text-[#ff00ff] uppercase">
-            What I Do
-          </span>
+          <div className="relative inline-block">
+            <span
+              className="text-sm font-medium tracking-[0.3em] text-[#ff00ff] uppercase cursor-pointer"
+              onMouseEnter={() => setIsHoveringTitle(true)}
+              onMouseLeave={() => setIsHoveringTitle(false)}
+            >
+              What I Do
+            </span>
+            <ComicBubble isVisible={isHoveringTitle} />
+          </div>
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-black mt-4 tracking-tight">
             <span className="text-gradient-neon">Services</span>
           </h2>
