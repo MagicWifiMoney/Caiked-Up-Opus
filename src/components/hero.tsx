@@ -100,7 +100,7 @@ export function Hero() {
       {/* Main Content */}
       <motion.div
         style={{ y, opacity, scale }}
-        className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6"
+        className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 pt-20 md:pt-24"
       >
         {/* Floating Image */}
         <motion.div
