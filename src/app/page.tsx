@@ -7,7 +7,7 @@ import { Hero } from "@/components/hero";
 import { About } from "@/components/about";
 import { Services } from "@/components/services";
 import { Media } from "@/components/media";
-import { Testimonials } from "@/components/testimonials";
+import { IPodVideoShowcase } from "@/components/ipod-video-showcase";
 import { Contact } from "@/components/contact";
 import { Footer } from "@/components/footer";
 import { SectionTransition } from "@/components/section-transition";
@@ -248,7 +248,7 @@ export default function Home() {
         <VinylTransition />
         <Media />
         <SectionTransition variant="diagonal" />
-        <Testimonials />
+        <IPodVideoShowcase />
         <PartyTransition />
         <Contact />
         <Footer />

@@ -99,44 +99,44 @@ function ExperienceCard({
             ? `0 30px 60px -15px ${experience.color}40, 0 0 100px -30px ${experience.color}30`
             : "0 10px 40px -15px rgba(0,0,0,0.5)",
         }}
-        className="relative h-[500px] rounded-3xl overflow-hidden glass"
+        className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden bg-[#0a0a0f] border border-white/5"
       >
-        {/* Background Image */}
-        <Image
-          src={experience.image}
-          alt={experience.title}
-          fill
-          className="object-cover transition-all duration-700"
-          style={{
-            transform: isHovered ? "scale(1.1)" : "scale(1)",
-          }}
-        />
+        {/* Background Image Container - Isolated */}
+        <div className="absolute inset-0 overflow-hidden">
+          <Image
+            src={experience.image}
+            alt={experience.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            style={{
+              transform: isHovered ? "scale(1.1)" : "scale(1)",
+              transition: "transform 0.7s ease-out",
+            }}
+            priority={index < 2}
+          />
+        </div>
 
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/40 to-transparent pointer-events-none" />
 
-        {/* Spotlight Effect */}
+        {/* Color tint on hover */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
+          animate={{ opacity: isHovered ? 0.15 : 0 }}
           className="absolute inset-0 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle at ${(mouseX.get() + 0.5) * 100}% ${
-              (mouseY.get() + 0.5) * 100
-            }%, ${experience.color}30 0%, transparent 50%)`,
-          }}
+          style={{ backgroundColor: experience.color }}
         />
 
         {/* Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 transform-gpu" style={{ transform: "translateZ(50px)" }}>
+        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-10">
           {/* Stats Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0.7, y: 10 }}
             animate={{ opacity: isHovered ? 1 : 0.7, y: isHovered ? 0 : 10 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
+            className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full mb-3 md:mb-4"
             style={{ backgroundColor: `${experience.color}20`, border: `1px solid ${experience.color}40` }}
           >
-            <span className="text-xs font-semibold" style={{ color: experience.color }}>
+            <span className="text-[10px] md:text-xs font-semibold" style={{ color: experience.color }}>
               {experience.stats}
             </span>
           </motion.div>
@@ -144,22 +144,22 @@ function ExperienceCard({
           {/* Title */}
           <motion.h3
             animate={{ y: isHovered ? 0 : 10 }}
-            className="text-3xl font-black text-white mb-2"
+            className="text-2xl md:text-3xl font-black text-white mb-2"
           >
             {experience.title}
           </motion.h3>
 
           {/* Description */}
           <motion.p
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 0.6 }}
             animate={{ opacity: isHovered ? 1 : 0.6, y: isHovered ? 0 : 10 }}
-            className="text-white/70"
+            className="text-sm md:text-base text-white/70"
           >
             {experience.description}
           </motion.p>
         </div>
 
-        {/* Decorative Border */}
+        {/* Decorative Border on hover */}
         <motion.div
           animate={{ opacity: isHovered ? 1 : 0 }}
           className="absolute inset-0 rounded-3xl pointer-events-none"
@@ -171,13 +171,13 @@ function ExperienceCard({
         {/* Corner Accents */}
         <motion.div
           animate={{ scale: isHovered ? 1 : 0 }}
-          className="absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 rounded-tr-xl"
+          className="absolute top-4 right-4 w-12 h-12 md:w-16 md:h-16 border-t-2 border-r-2 rounded-tr-xl"
           style={{ borderColor: `${experience.color}60` }}
         />
         <motion.div
           animate={{ scale: isHovered ? 1 : 0 }}
           transition={{ delay: 0.1 }}
-          className="absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 rounded-bl-xl"
+          className="absolute bottom-4 left-4 w-12 h-12 md:w-16 md:h-16 border-b-2 border-l-2 rounded-bl-xl"
           style={{ borderColor: `${experience.color}60` }}
         />
       </motion.div>
@@ -195,7 +195,7 @@ export function ExperienceShowcase() {
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   return (
-    <section ref={containerRef} className="relative py-32 overflow-hidden bg-[#0a0a0f]">
+    <section ref={containerRef} className="relative py-24 md:py-32 overflow-hidden bg-[#0a0a0f]">
       {/* Background */}
       <div className="absolute inset-0 grid-pattern opacity-20" />
       <motion.div
@@ -203,28 +203,28 @@ export function ExperienceShowcase() {
         className="absolute top-1/4 -left-40 w-[600px] h-[600px] bg-gradient-radial from-[#00f0ff]/10 to-transparent rounded-full blur-3xl"
       />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="text-center mb-12 md:mb-20"
         >
           <span className="text-sm font-medium tracking-[0.3em] text-[#8b00ff] uppercase">
             The Experience
           </span>
-          <h2 className="text-5xl md:text-7xl font-black mt-4 tracking-tight">
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-black mt-4 tracking-tight">
             Where I <span className="text-gradient-neon">Perform</span>
           </h2>
-          <p className="mt-6 text-lg text-white/50 max-w-2xl mx-auto">
+          <p className="mt-4 md:mt-6 text-base md:text-lg text-white/50 max-w-2xl mx-auto">
             From massive festival stages to intimate club nights, every set is crafted to create unforgettable moments
           </p>
         </motion.div>
 
         {/* Cards Grid */}
-        <div className="grid md:grid-cols-2 gap-8 perspective-container">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-8">
           {experiences.map((experience, index) => (
             <ExperienceCard key={experience.id} experience={experience} index={index} />
           ))}
