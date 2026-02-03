@@ -372,13 +372,13 @@
 
 /* Mobile Performance Optimizations */
 @media (max-width: 768px) {
-  /* Disable heavy effects on mobile for better performance */
+  /* Reduce heavy blur effects on mobile */
   .glass,
   .glass-dark {
     backdrop-filter: blur(8px);
   }
 
-  /* Reduce/disable animations on mobile */
+  /* Disable continuous floating animations on mobile */
   .animate-float,
   .animate-float-delayed,
   .animate-float-slow,
@@ -386,20 +386,10 @@
     animation: none !important;
   }
 
-  /* Faster animations where they exist */
-  * {
-    animation-duration: 0.3s !important;
-  }
-
-  /* Optimize scrolling */
-  html {
-    scroll-behavior: auto;
-  }
-
   /* Enable hardware acceleration for smoother scrolling */
   section {
     transform: translateZ(0);
-    contain: layout style paint;
+    contain: layout style;
   }
 
   /* Optimize images */

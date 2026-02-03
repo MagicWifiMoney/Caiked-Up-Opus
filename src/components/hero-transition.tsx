@@ -261,26 +261,54 @@ export function HeroTransition() {
         <div className="w-[600px] h-[600px] bg-gradient-radial from-[#00f0ff]/20 via-[#ff00ff]/10 to-transparent rounded-full blur-3xl" />
       </motion.div>
 
-      {/* Minneapolis Skyline - Left Side */}
+      {/* Minneapolis Skyline - Left Side on desktop, bottom on mobile */}
       <motion.div
         style={{ x: leftX, opacity, scale }}
-        className="absolute left-0 top-1/2 -translate-y-1/2 w-[500px] h-[300px]"
+        className="absolute left-0 top-1/2 -translate-y-1/2 w-[500px] h-[300px] hidden md:block"
       >
         <MinneapolisSkyline />
       </motion.div>
 
-      {/* Graffiti MPLS - Right Side */}
+      {/* Graffiti MPLS - Right Side on desktop, centered on mobile */}
       <motion.div
         style={{ x: rightX, opacity, scale }}
-        className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[200px]"
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[200px] hidden md:block"
       >
         <GraffitiMPLS />
       </motion.div>
 
-      {/* Left side animated arrows */}
+      {/* Mobile Layout - Stacked skyline and MPLS */}
+      <motion.div
+        style={{ opacity }}
+        className="absolute inset-0 flex flex-col items-center justify-center md:hidden"
+      >
+        {/* MPLS centered on mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="w-[280px] h-[140px]"
+        >
+          <GraffitiMPLS />
+        </motion.div>
+
+        {/* Skyline below on mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="w-[320px] h-[180px] -mt-4"
+        >
+          <MinneapolisSkyline />
+        </motion.div>
+      </motion.div>
+
+      {/* Left side animated arrows - hidden on mobile */}
       <motion.div
         style={{ x: leftX, opacity }}
-        className="absolute left-[30%] top-0 bottom-0 flex items-center"
+        className="absolute left-[30%] top-0 bottom-0 items-center hidden md:flex"
       >
         <div className="flex items-center gap-3">
           {[...Array(chevronCount)].map((_, i) => (
@@ -310,10 +338,10 @@ export function HeroTransition() {
         </div>
       </motion.div>
 
-      {/* Right side animated arrows */}
+      {/* Right side animated arrows - hidden on mobile */}
       <motion.div
         style={{ x: rightX, opacity }}
-        className="absolute right-[30%] top-0 bottom-0 flex items-center"
+        className="absolute right-[30%] top-0 bottom-0 items-center hidden md:flex"
       >
         <div className="flex items-center gap-3">
           {[...Array(chevronCount)].map((_, i) => (
@@ -343,10 +371,10 @@ export function HeroTransition() {
         </div>
       </motion.div>
 
-      {/* Center converging big arrows */}
+      {/* Center converging big arrows - hidden on mobile */}
       <motion.div
         style={{ opacity: arrowOpacity, scale: arrowScale }}
-        className="absolute inset-0 flex items-center justify-center gap-12"
+        className="absolute inset-0 items-center justify-center gap-12 hidden md:flex"
       >
         {/* Left arrow pointing right */}
         <motion.div style={{ x: arrowLeftX }}>
@@ -408,8 +436,8 @@ export function HeroTransition() {
         </motion.div>
       </motion.div>
 
-      {/* Animated line traces */}
-      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+      {/* Animated line traces - hidden on mobile */}
+      <svg className="absolute inset-0 w-full h-full hidden md:block" preserveAspectRatio="none">
         <motion.line
           x1="0%"
           y1="50%"
