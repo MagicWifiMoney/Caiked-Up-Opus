@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useInView } from "motion/react";
 import Image from "next/image";
-import { Music2, PartyPopper, Heart, Dumbbell, Building2, Mic2 } from "lucide-react";
+import { Music2, Heart, Building2, Mic2 } from "lucide-react";
 
 const services = [
   {
@@ -22,7 +22,7 @@ const services = [
     description:
       "Your special day deserves the perfect soundtrack. Expertly blending ceremony elegance with reception energy to create moments you'll remember forever.",
     icon: Heart,
-    image: "/images/Know Good.JPG",
+    image: "/images/Twins.JPG",
     color: "#ff00ff",
     venues: ["Custom song selection", "MC services", "Sound equipment", "Lighting options"],
   },
@@ -32,7 +32,7 @@ const services = [
     description:
       "Professional entertainment for corporate gatherings, brand activations, and private events. Elevating your event with sophisticated sound curation.",
     icon: Building2,
-    image: "/images/EDM EC Good.JPG",
+    image: "/images/MN Legit.JPG",
     color: "#8b00ff",
     venues: ["Lifetime Fitness", "Twins Stadium", "Allianz Field", "Brand activations"],
   },
@@ -72,12 +72,13 @@ function ServiceCard({
         className="relative h-full glass rounded-3xl overflow-hidden"
       >
         {/* Image */}
-        <div className="relative h-64 overflow-hidden">
+        <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
           <Image
             src={service.image}
             alt={service.title}
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            className="object-cover object-center transition-transform duration-700 group-hover:scale-110"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/50 to-transparent" />
 
@@ -86,10 +87,10 @@ function ServiceCard({
             initial={{ scale: 0 }}
             animate={isInView ? { scale: 1 } : {}}
             transition={{ delay: 0.3 + index * 0.15, type: "spring" }}
-            className="absolute top-4 right-4 w-12 h-12 rounded-2xl flex items-center justify-center"
+            className="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center"
             style={{ backgroundColor: `${service.color}20` }}
           >
-            <service.icon className="w-6 h-6" style={{ color: service.color }} />
+            <service.icon className="w-5 h-5 md:w-6 md:h-6" style={{ color: service.color }} />
           </motion.div>
 
           {/* Hover Glow */}
@@ -104,18 +105,18 @@ function ServiceCard({
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-4">
-          <h3 className="text-2xl font-bold text-white group-hover:text-gradient-neon transition-all duration-300">
+        <div className="p-4 md:p-6 space-y-3 md:space-y-4">
+          <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-gradient-neon transition-all duration-300">
             {service.title}
           </h3>
-          <p className="text-white/60 leading-relaxed">{service.description}</p>
+          <p className="text-sm md:text-base text-white/60 leading-relaxed">{service.description}</p>
 
           {/* Venues/Features */}
-          <div className="flex flex-wrap gap-2 pt-2">
+          <div className="flex flex-wrap gap-1.5 md:gap-2 pt-2">
             {service.venues.map((venue) => (
               <span
                 key={venue}
-                className="px-3 py-1 text-xs rounded-full bg-white/5 text-white/50 border border-white/10"
+                className="px-2 md:px-3 py-0.5 md:py-1 text-[10px] md:text-xs rounded-full bg-white/5 text-white/50 border border-white/10"
               >
                 {venue}
               </span>
@@ -151,7 +152,7 @@ export function Services() {
     <section
       ref={containerRef}
       id="services"
-      className="relative py-32 overflow-hidden bg-[#0a0a0f]"
+      className="relative py-24 md:py-32 overflow-hidden bg-[#0a0a0f]"
     >
       {/* Background */}
       <div className="absolute inset-0 grid-pattern opacity-30" />
@@ -164,28 +165,28 @@ export function Services() {
         className="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-gradient-radial from-[#ff00ff]/10 to-transparent rounded-full blur-3xl"
       />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="text-center mb-12 md:mb-20"
         >
           <span className="text-sm font-medium tracking-[0.3em] text-[#ff00ff] uppercase">
             What I Do
           </span>
-          <h2 className="text-5xl md:text-7xl font-black mt-4 tracking-tight">
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-black mt-4 tracking-tight">
             <span className="text-gradient-neon">Services</span>
           </h2>
-          <p className="mt-6 text-lg text-white/50 max-w-2xl mx-auto">
+          <p className="mt-4 md:mt-6 text-base md:text-lg text-white/50 max-w-2xl mx-auto px-4">
             From festival stages to intimate celebrations, bringing the perfect energy to every moment
           </p>
         </motion.div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid sm:grid-cols-2 gap-4 md:gap-8">
           {services.map((service, index) => (
             <ServiceCard key={service.id} service={service} index={index} />
           ))}
@@ -197,13 +198,13 @@ export function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
-          className="text-center mt-16"
+          className="text-center mt-12 md:mt-16"
         >
           <motion.a
             href="#contact"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#00f0ff] to-[#ff00ff] rounded-full font-bold text-black hover:shadow-[0_0_40px_rgba(0,240,255,0.4)] transition-shadow"
+            className="inline-flex items-center gap-3 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-[#00f0ff] to-[#ff00ff] rounded-full font-bold text-sm md:text-base text-black hover:shadow-[0_0_40px_rgba(0,240,255,0.4)] transition-shadow"
           >
             Get a Custom Quote
           </motion.a>
