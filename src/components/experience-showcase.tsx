@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
 
 const experiences = [
@@ -25,7 +25,7 @@ const experiences = [
     id: 3,
     title: "Direct Support",
     description: "Opening for SIDEPIECE at The Fillmore",
-    image: "/images/Sidepiece Good.JPG",
+    image: "/images/Keep Sidepiece.JPG",
     color: "#8b00ff",
     stats: "Industry legends",
   },
@@ -49,33 +49,6 @@ function ExperienceCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), {
-    stiffness: 200,
-    damping: 20,
-  });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), {
-    stiffness: 200,
-    damping: 20,
-  });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(x);
-    mouseY.set(y);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-    setIsHovered(false);
-  };
-
   return (
     <motion.div
       ref={cardRef}
@@ -83,14 +56,8 @@ function ExperienceCard({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: index * 0.15 }}
       viewport={{ once: true, margin: "-100px" }}
-      onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
+      onMouseLeave={() => setIsHovered(false)}
       className="relative group cursor-pointer"
     >
       <motion.div
@@ -99,85 +66,75 @@ function ExperienceCard({
             ? `0 30px 60px -15px ${experience.color}40, 0 0 100px -30px ${experience.color}30`
             : "0 10px 40px -15px rgba(0,0,0,0.5)",
         }}
-        className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden bg-[#0a0a0f] border border-white/5"
+        whileHover={{ y: -10 }}
+        transition={{ duration: 0.4 }}
+        className="relative rounded-3xl overflow-hidden bg-[#0d0d15] border border-white/5"
       >
-        {/* Background Image Container - Isolated */}
-        <div className="absolute inset-0 overflow-hidden">
+        {/* Image Container - Using aspect ratio */}
+        <div className="relative aspect-[3/4] md:aspect-[4/5] overflow-hidden bg-[#0a0a0f]">
           <Image
             src={experience.image}
             alt={experience.title}
             fill
-            className="object-cover"
+            className="object-cover object-center transition-transform duration-700"
             sizes="(max-width: 768px) 100vw, 50vw"
             style={{
               transform: isHovered ? "scale(1.1)" : "scale(1)",
-              transition: "transform 0.7s ease-out",
             }}
             priority={index < 2}
           />
-        </div>
 
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/40 to-transparent pointer-events-none" />
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d15] via-[#0d0d15]/40 to-transparent" />
 
-        {/* Color tint on hover */}
-        <motion.div
-          animate={{ opacity: isHovered ? 0.15 : 0 }}
-          className="absolute inset-0 pointer-events-none"
-          style={{ backgroundColor: experience.color }}
-        />
-
-        {/* Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-10">
-          {/* Stats Badge */}
+          {/* Color tint on hover */}
           <motion.div
-            initial={{ opacity: 0.7, y: 10 }}
-            animate={{ opacity: isHovered ? 1 : 0.7, y: isHovered ? 0 : 10 }}
-            className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full mb-3 md:mb-4"
-            style={{ backgroundColor: `${experience.color}20`, border: `1px solid ${experience.color}40` }}
-          >
-            <span className="text-[10px] md:text-xs font-semibold" style={{ color: experience.color }}>
-              {experience.stats}
-            </span>
-          </motion.div>
+            animate={{ opacity: isHovered ? 0.15 : 0 }}
+            className="absolute inset-0 pointer-events-none"
+            style={{ backgroundColor: experience.color }}
+          />
 
-          {/* Title */}
-          <motion.h3
-            animate={{ y: isHovered ? 0 : 10 }}
-            className="text-2xl md:text-3xl font-black text-white mb-2"
-          >
-            {experience.title}
-          </motion.h3>
+          {/* Content overlay at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 p-5 md:p-8">
+            {/* Stats Badge */}
+            <motion.div
+              animate={{ opacity: isHovered ? 1 : 0.8, y: isHovered ? 0 : 5 }}
+              className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full mb-3 md:mb-4 backdrop-blur-sm"
+              style={{ backgroundColor: `${experience.color}30`, border: `1px solid ${experience.color}50` }}
+            >
+              <span className="text-[10px] md:text-xs font-semibold" style={{ color: experience.color }}>
+                {experience.stats}
+              </span>
+            </motion.div>
 
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0.6 }}
-            animate={{ opacity: isHovered ? 1 : 0.6, y: isHovered ? 0 : 10 }}
-            className="text-sm md:text-base text-white/70"
-          >
-            {experience.description}
-          </motion.p>
+            {/* Title */}
+            <motion.h3
+              animate={{ y: isHovered ? 0 : 5 }}
+              className="text-2xl md:text-3xl font-black text-white mb-2"
+            >
+              {experience.title}
+            </motion.h3>
+
+            {/* Description */}
+            <motion.p
+              animate={{ opacity: isHovered ? 1 : 0.7, y: isHovered ? 0 : 5 }}
+              className="text-sm md:text-base text-white/80"
+            >
+              {experience.description}
+            </motion.p>
+          </div>
         </div>
-
-        {/* Decorative Border on hover */}
-        <motion.div
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          className="absolute inset-0 rounded-3xl pointer-events-none"
-          style={{
-            border: `1px solid ${experience.color}40`,
-          }}
-        />
 
         {/* Corner Accents */}
         <motion.div
           animate={{ scale: isHovered ? 1 : 0 }}
-          className="absolute top-4 right-4 w-12 h-12 md:w-16 md:h-16 border-t-2 border-r-2 rounded-tr-xl"
+          className="absolute top-4 right-4 w-12 h-12 md:w-16 md:h-16 border-t-2 border-r-2 rounded-tr-xl pointer-events-none"
           style={{ borderColor: `${experience.color}60` }}
         />
         <motion.div
           animate={{ scale: isHovered ? 1 : 0 }}
           transition={{ delay: 0.1 }}
-          className="absolute bottom-4 left-4 w-12 h-12 md:w-16 md:h-16 border-b-2 border-l-2 rounded-bl-xl"
+          className="absolute bottom-4 left-4 w-12 h-12 md:w-16 md:h-16 border-b-2 border-l-2 rounded-bl-xl pointer-events-none"
           style={{ borderColor: `${experience.color}60` }}
         />
       </motion.div>
@@ -224,7 +181,7 @@ export function ExperienceShowcase() {
         </motion.div>
 
         {/* Cards Grid */}
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           {experiences.map((experience, index) => (
             <ExperienceCard key={experience.id} experience={experience} index={index} />
           ))}

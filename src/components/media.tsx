@@ -10,21 +10,21 @@ const mixes = [
     id: 1,
     title: "SHARK GOT YOUR TONGUE?",
     subtitle: "Direct support set for JAUZ",
-    embedUrl: "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/caikedup/shark-got-your-tongue&color=%2300f0ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false",
+    embedUrl: "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/caikin/shark-got-your-tongue&color=%2300f0ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false",
     color: "#00f0ff",
   },
   {
     id: 2,
     title: "COLD AS ICE MIXTAPE",
     subtitle: "Winter vibes collection",
-    embedUrl: "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/caikedup/cold-as-ice-mixtape&color=%23ff00ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false",
+    embedUrl: "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/caikin/cold-as-ice-mixtape&color=%23ff00ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false",
     color: "#ff00ff",
   },
   {
     id: 3,
     title: "EXPRESS LANE MIXTAPE",
     subtitle: "High-energy house mix",
-    embedUrl: "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/caikedup/express-lane-mixtape&color=%238b00ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false",
+    embedUrl: "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/caikin/express-lane-mixtape&color=%238b00ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false",
     color: "#8b00ff",
   },
 ];
@@ -234,7 +234,7 @@ export function Media() {
 
             {/* SoundCloud Link */}
             <motion.a
-              href="https://soundcloud.com/caikedup"
+              href="https://soundcloud.com/caikin"
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0 }}
@@ -293,7 +293,7 @@ export function Media() {
 
             {/* SoundCloud Link */}
             <motion.a
-              href="https://soundcloud.com/caikedup"
+              href="https://soundcloud.com/caikin"
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0 }}

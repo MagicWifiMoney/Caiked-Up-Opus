@@ -22,7 +22,7 @@ const services = [
     description:
       "Your special day deserves the perfect soundtrack. Expertly blending ceremony elegance with reception energy to create moments you'll remember forever.",
     icon: Heart,
-    image: "/images/Twins.JPG",
+    image: "/images/J Worra.JPG",
     color: "#ff00ff",
     venues: ["Custom song selection", "MC services", "Sound equipment", "Lighting options"],
   },
@@ -32,7 +32,7 @@ const services = [
     description:
       "Professional entertainment for corporate gatherings, brand activations, and private events. Elevating your event with sophisticated sound curation.",
     icon: Building2,
-    image: "/images/MN Legit.JPG",
+    image: "/images/Twins.JPG",
     color: "#8b00ff",
     venues: ["Lifetime Fitness", "Twins Stadium", "Allianz Field", "Brand activations"],
   },
@@ -69,39 +69,38 @@ function ServiceCard({
       <motion.div
         whileHover={{ y: -10 }}
         transition={{ duration: 0.4 }}
-        className="relative h-full glass rounded-3xl overflow-hidden"
+        className="relative h-full rounded-3xl overflow-hidden bg-[#0d0d15] border border-white/5"
       >
-        {/* Image */}
-        <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
+        {/* Image Container - Taller aspect ratio for vertical images */}
+        <div className="relative aspect-[4/3] overflow-hidden bg-[#0a0a0f]">
           <Image
             src={service.image}
             alt={service.title}
             fill
-            className="object-cover object-top transition-transform duration-700 group-hover:scale-110"
+            className="object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-110"
             sizes="(max-width: 768px) 100vw, 50vw"
             priority={index < 2}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/50 to-transparent" />
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d15] via-[#0d0d15]/30 to-transparent" />
 
           {/* Icon Badge */}
           <motion.div
             initial={{ scale: 0 }}
             animate={isInView ? { scale: 1 } : {}}
             transition={{ delay: 0.3 + index * 0.15, type: "spring" }}
-            className="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center"
-            style={{ backgroundColor: `${service.color}20` }}
+            className="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center backdrop-blur-sm"
+            style={{ backgroundColor: `${service.color}30`, border: `1px solid ${service.color}50` }}
           >
             <service.icon className="w-5 h-5 md:w-6 md:h-6" style={{ color: service.color }} />
           </motion.div>
 
-          {/* Hover Glow */}
+          {/* Hover Color Tint */}
           <motion.div
             initial={{ opacity: 0 }}
-            whileHover={{ opacity: 1 }}
+            whileHover={{ opacity: 0.2 }}
             className="absolute inset-0 pointer-events-none"
-            style={{
-              background: `radial-gradient(circle at center, ${service.color}20 0%, transparent 70%)`,
-            }}
+            style={{ backgroundColor: service.color }}
           />
         </div>
 
