@@ -12,7 +12,6 @@ import { Contact } from "@/components/contact";
 import { Footer } from "@/components/footer";
 import { SectionTransition } from "@/components/section-transition";
 import { ExperienceShowcase } from "@/components/experience-showcase";
-import { MusicVisualizer } from "@/components/music-visualizer";
 import { HeroTransition } from "@/components/hero-transition";
 import { AudioWaveTransition } from "@/components/audio-wave-transition";
 import { VinylTransition } from "@/components/vinyl-transition";
@@ -124,81 +123,63 @@ function LoadingScreen() {
 }
 
 function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [trail, setTrail] = useState<Array<{ x: number; y: number; id: number }>>([]);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
   const [isPointer, setIsPointer] = useState(false);
-  const trailId = useRef(0);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const newPos = { x: e.clientX, y: e.clientY };
-      setPosition(newPos);
+    let rafId: number;
+    let mouseX = 0;
+    let mouseY = 0;
 
-      // Add to trail
-      trailId.current += 1;
-      setTrail((prev) => [...prev.slice(-12), { ...newPos, id: trailId.current }]);
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
 
       const target = e.target as HTMLElement;
       setIsPointer(
-        window.getComputedStyle(target).cursor === "pointer" ||
         target.tagName === "A" ||
-        target.tagName === "BUTTON"
+        target.tagName === "BUTTON" ||
+        target.closest("a") !== null ||
+        target.closest("button") !== null
       );
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+    // Use RAF for smooth cursor movement
+    const updateCursor = () => {
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${mouseX - 6}px, ${mouseY - 6}px, 0) scale(${isPointer ? 1.5 : 1})`;
+      }
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate3d(${mouseX - 20}px, ${mouseY - 20}px, 0) scale(${isPointer ? 1.5 : 1})`;
+      }
+      rafId = requestAnimationFrame(updateCursor);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    rafId = requestAnimationFrame(updateCursor);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(rafId);
+    };
+  }, [isPointer]);
 
   return (
     <>
-      {/* Comet Trail */}
-      {trail.map((point, index) => {
-        const opacity = (index + 1) / trail.length * 0.6;
-        const size = 2 + (index / trail.length) * 6;
-        return (
-          <motion.div
-            key={point.id}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            transition={{ duration: 0.15 }}
-            className="fixed rounded-full pointer-events-none z-[198] hidden md:block"
-            style={{
-              left: point.x - size / 2,
-              top: point.y - size / 2,
-              width: size,
-              height: size,
-              background: `radial-gradient(circle, ${index % 2 === 0 ? 'rgba(0,240,255,0.8)' : 'rgba(255,0,255,0.8)'} 0%, transparent 70%)`,
-              filter: 'blur(1px)',
-            }}
-          />
-        );
-      })}
-
-      {/* Main Cursor - instant follow */}
-      <motion.div
-        animate={{
-          x: position.x - 6,
-          y: position.y - 6,
-          scale: isPointer ? 1.5 : 1,
-        }}
-        transition={{ type: "tween", duration: 0 }}
-        className="fixed w-3 h-3 rounded-full bg-[#00f0ff] pointer-events-none z-[200] hidden md:block"
+      {/* Main Cursor */}
+      <div
+        ref={cursorRef}
+        className="fixed w-3 h-3 rounded-full bg-[#00f0ff] pointer-events-none z-[200] hidden md:block will-change-transform"
         style={{
-          boxShadow: '0 0 10px #00f0ff, 0 0 20px #00f0ff, 0 0 30px #00f0ff',
+          boxShadow: '0 0 10px #00f0ff, 0 0 20px #00f0ff',
         }}
       />
 
-      {/* Cursor Glow Ring */}
-      <motion.div
-        animate={{
-          x: position.x - 20,
-          y: position.y - 20,
-          scale: isPointer ? 1.5 : 1,
-        }}
-        transition={{ type: "spring", stiffness: 800, damping: 35 }}
-        className="fixed w-10 h-10 rounded-full pointer-events-none z-[199] hidden md:block"
+      {/* Cursor Ring */}
+      <div
+        ref={ringRef}
+        className="fixed w-10 h-10 rounded-full pointer-events-none z-[199] hidden md:block will-change-transform transition-transform duration-100"
         style={{
           background: 'radial-gradient(circle, rgba(0,240,255,0.15) 0%, transparent 70%)',
           border: '1px solid rgba(0,240,255,0.3)',
@@ -224,9 +205,6 @@ export default function Home() {
     <main className="relative bg-[#0a0a0f] min-h-screen cursor-none md:cursor-none">
       {/* Custom Cursor */}
       <CustomCursor />
-
-      {/* Music Visualizer */}
-      {!isLoading && <MusicVisualizer />}
 
       {/* Loading Screen */}
       <AnimatePresence>{isLoading && <LoadingScreen />}</AnimatePresence>

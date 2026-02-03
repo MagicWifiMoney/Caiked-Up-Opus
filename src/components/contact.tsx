@@ -32,6 +32,7 @@ export function Contact() {
   const formRef = useRef<HTMLDivElement>(null);
   const isFormInView = useInView(formRef, { once: true, margin: "-100px" });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedEventType, setSelectedEventType] = useState("");
 
   const { scrollYProgress } = useScroll({
@@ -41,10 +42,30 @@ export function Contact() {
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    // In production, this would submit to an API
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.currentTarget);
+    formData.append("eventType", selectedEventType);
+
+    try {
+      const response = await fetch("https://formspree.io/f/xwpkgjbp", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -210,6 +231,7 @@ export function Contact() {
                     </Label>
                     <Input
                       id="name"
+                      name="name"
                       placeholder="Your name"
                       required
                       className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#00f0ff] focus:ring-[#00f0ff]/20"
@@ -224,6 +246,7 @@ export function Contact() {
                     </Label>
                     <Input
                       id="email"
+                      name="email"
                       type="email"
                       placeholder="your@email.com"
                       required
@@ -267,6 +290,7 @@ export function Contact() {
                     </Label>
                     <Input
                       id="date"
+                      name="eventDate"
                       type="date"
                       className="bg-white/5 border-white/10 text-white focus:border-[#00f0ff] focus:ring-[#00f0ff]/20"
                     />
@@ -280,6 +304,7 @@ export function Contact() {
                     </Label>
                     <Input
                       id="venue"
+                      name="venue"
                       placeholder="Venue name or city"
                       className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#00f0ff] focus:ring-[#00f0ff]/20"
                     />
@@ -294,6 +319,7 @@ export function Contact() {
                   </Label>
                   <Textarea
                     id="message"
+                    name="message"
                     placeholder="Share details about your event, vibe you're going for, expected attendance, etc."
                     rows={4}
                     className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#00f0ff] focus:ring-[#00f0ff]/20 resize-none"
@@ -303,12 +329,26 @@ export function Contact() {
                 {/* Submit */}
                 <motion.button
                   type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-4 bg-gradient-to-r from-[#00f0ff] to-[#ff00ff] rounded-xl font-bold text-black flex items-center justify-center gap-2 hover:shadow-[0_0_40px_rgba(0,240,255,0.4)] transition-shadow"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                  className="w-full py-4 bg-gradient-to-r from-[#00f0ff] to-[#ff00ff] rounded-xl font-bold text-black flex items-center justify-center gap-2 hover:shadow-[0_0_40px_rgba(0,240,255,0.4)] transition-shadow disabled:opacity-70"
                 >
-                  <Send className="w-5 h-5" />
-                  Send Inquiry
+                  {isSubmitting ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full"
+                      />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Send Inquiry
+                    </>
+                  )}
                 </motion.button>
 
                 <p className="text-center text-sm text-white/30">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import Image from "next/image";
 import { ChevronDown, Play, Headphones } from "lucide-react";
@@ -63,18 +63,6 @@ export function Hero() {
   const scale = useTransform(smoothProgress, [0, 0.5], [1, 0.9]);
   const textY = useTransform(smoothProgress, [0, 0.5], [0, -100]);
 
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20,
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
 
   return (
     <section
@@ -107,11 +95,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          style={{
-            x: mousePosition.x,
-            y: mousePosition.y,
-          }}
-          className="relative mb-8 animate-float"
+          className="relative mb-8"
         >
           <div className="relative w-72 h-72 md:w-96 md:h-96">
             {/* Glow Ring */}

@@ -375,23 +375,59 @@
   /* Disable heavy effects on mobile for better performance */
   .glass,
   .glass-dark {
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
   }
 
-  /* Reduce animation complexity */
+  /* Reduce/disable animations on mobile */
+  .animate-float,
+  .animate-float-delayed,
+  .animate-float-slow,
+  .animate-pulse-glow {
+    animation: none !important;
+  }
+
+  /* Faster animations where they exist */
   * {
-    animation-duration: 0.5s !important;
+    animation-duration: 0.3s !important;
+  }
+
+  /* Optimize scrolling */
+  html {
+    scroll-behavior: auto;
   }
 
   /* Enable hardware acceleration for smoother scrolling */
   section {
     transform: translateZ(0);
-    will-change: transform;
+    contain: layout style paint;
   }
 
   /* Optimize images */
   img {
     content-visibility: auto;
+  }
+
+  /* Reduce box-shadow complexity */
+  .glow-cyan,
+  .glow-magenta {
+    box-shadow: 0 0 15px currentColor;
+  }
+
+  /* Disable parallax-heavy transforms */
+  .perspective-container {
+    perspective: none;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -400,4 +436,16 @@
   transform: translateZ(0);
   backface-visibility: hidden;
   will-change: transform;
+}
+
+/* Smooth scroll container */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optimize paint for fixed elements */
+.fixed {
+  will-change: transform;
+  backface-visibility: hidden;
 }
