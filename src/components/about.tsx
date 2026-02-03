@@ -110,7 +110,7 @@ function PhotoMosaic() {
             rotate: hoveredIndex === 1 ? 0 : -8,
             y: hoveredIndex === 1 ? -10 : 0,
           }}
-          className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-[#00f0ff]/30 animate-float"
+          className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-[#00f0ff]/30"
           style={{
             boxShadow: hoveredIndex === 1
               ? "0 0 40px rgba(0,240,255,0.4)"
@@ -141,7 +141,7 @@ function PhotoMosaic() {
             rotate: hoveredIndex === 2 ? 0 : 6,
             y: hoveredIndex === 2 ? -10 : 0,
           }}
-          className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-[#ff00ff]/30 animate-float-delayed"
+          className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-[#ff00ff]/30"
           style={{
             boxShadow: hoveredIndex === 2
               ? "0 0 40px rgba(255,0,255,0.4)"
@@ -177,7 +177,6 @@ function PhotoMosaic() {
             boxShadow: hoveredIndex === 3
               ? "0 0 40px rgba(139,0,255,0.4)"
               : "0 15px 30px rgba(0,0,0,0.4)",
-            animation: "float 6s ease-in-out infinite 1s",
           }}
         >
           <Image
@@ -209,7 +208,6 @@ function PhotoMosaic() {
             boxShadow: hoveredIndex === 4
               ? "0 0 40px rgba(0,240,255,0.4)"
               : "0 15px 30px rgba(0,0,0,0.4)",
-            animation: "float 6s ease-in-out infinite 0.5s",
           }}
         >
           <Image
