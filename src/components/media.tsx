@@ -92,7 +92,7 @@ function AccordionGallery() {
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.8 }}
-        className="flex h-[400px] md:h-[500px] gap-2 md:gap-3"
+        className="flex h-[300px] md:h-[500px] gap-1 md:gap-3"
       >
         {galleryImages.map((image, index) => (
           <motion.div

@@ -26,7 +26,7 @@ const services = [
     image: "/images/J Worra.JPG",
     color: "#ff00ff",
     venues: ["Custom song selection", "MC services", "Sound equipment", "Lighting options"],
-    imagePosition: "center 35%", // Lower to show her face
+    imagePosition: "center 50%", // Center to show her face
   },
   {
     id: "corporate",

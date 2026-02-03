@@ -245,10 +245,10 @@ export default function Home() {
         <Services />
         <SectionTransition variant="dots" />
         <ExperienceShowcase />
+        <IPodVideoShowcase />
         <VinylTransition />
         <Media />
         <SectionTransition variant="diagonal" />
-        <IPodVideoShowcase />
         <PartyTransition />
         <Contact />
         <Footer />

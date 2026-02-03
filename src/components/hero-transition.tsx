@@ -438,10 +438,10 @@ export function HeroTransition() {
         />
       </svg>
 
-      {/* Bottom chevrons pointing down - positioned higher on mobile */}
+      {/* Bottom chevrons pointing down - hidden on mobile to not cover MPLS */}
       <motion.div
         style={{ opacity }}
-        className="absolute bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex-col items-center hidden md:flex"
       >
         {[0, 1, 2].map((i) => (
           <motion.div

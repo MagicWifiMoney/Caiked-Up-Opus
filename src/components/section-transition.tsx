@@ -140,6 +140,18 @@ export function SectionTransition({
         style={{ background: fromColor }}
       >
         <PrideEasterEgg isVisible={showPride} />
+
+        {/* Hint text */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: clickCount > 0 ? 0.6 : 0.3 }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        >
+          <span className="text-[10px] text-white/30 tracking-widest">
+            tap x3 for some love
+          </span>
+        </motion.div>
+
         <motion.div style={{ opacity }} className="absolute inset-0 flex items-center justify-center gap-8">
           {[...Array(20)].map((_, i) => (
             <motion.div

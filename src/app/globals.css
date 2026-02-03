@@ -369,3 +369,35 @@
   outline: 2px solid var(--color-neon-cyan);
   outline-offset: 2px;
 }
+
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  /* Disable heavy effects on mobile for better performance */
+  .glass,
+  .glass-dark {
+    backdrop-filter: blur(10px);
+  }
+
+  /* Reduce animation complexity */
+  * {
+    animation-duration: 0.5s !important;
+  }
+
+  /* Enable hardware acceleration for smoother scrolling */
+  section {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Optimize images */
+  img {
+    content-visibility: auto;
+  }
+}
+
+/* GPU acceleration hints */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}

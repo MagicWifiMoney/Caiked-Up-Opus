@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, Instagram, Music2, Headphones } from "lucide-react";
+import { Menu, X, Instagram, Music2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,9 +10,103 @@ const navLinks = [
   { href: "#about", label: "About" },
   { href: "#services", label: "Services" },
   { href: "#media", label: "Media" },
-  { href: "#testimonials", label: "Testimonials" },
   { href: "#contact", label: "Book" },
 ];
+
+const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%&*";
+
+// Scramble text component for mobile menu
+function ScrambleMenuItem({
+  label,
+  href,
+  index,
+  isMenuOpen,
+  onClose,
+}: {
+  label: string;
+  href: string;
+  index: number;
+  isMenuOpen: boolean;
+  onClose: () => void;
+}) {
+  const [displayText, setDisplayText] = useState(
+    label.split("").map(() => CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]).join("")
+  );
+  const [isScrambled, setIsScrambled] = useState(true);
+
+  const unscramble = useCallback(() => {
+    let iteration = 0;
+    const originalText = label;
+
+    const interval = setInterval(() => {
+      setDisplayText(
+        originalText
+          .split("")
+          .map((char, idx) => {
+            if (char === " ") return " ";
+            if (idx < iteration) {
+              return originalText[idx];
+            }
+            return CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+          })
+          .join("")
+      );
+
+      if (iteration >= originalText.length) {
+        clearInterval(interval);
+        setIsScrambled(false);
+      }
+
+      iteration += 0.5;
+    }, 40);
+
+    return () => clearInterval(interval);
+  }, [label]);
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      // Reset to scrambled state
+      setIsScrambled(true);
+      setDisplayText(
+        label.split("").map(() => CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]).join("")
+      );
+
+      // Start unscrambling after a delay based on index
+      const timeout = setTimeout(() => {
+        unscramble();
+      }, 200 + index * 150);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isMenuOpen, index, label, unscramble]);
+
+  return (
+    <motion.a
+      href={href}
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.1 + index * 0.1 }}
+      onClick={onClose}
+      className="text-3xl font-bold text-white hover:text-gradient-neon transition-all font-mono"
+    >
+      {displayText.split("").map((char, i) => (
+        <span
+          key={i}
+          style={{
+            color: isScrambled
+              ? i % 2 === 0
+                ? "#00f0ff"
+                : "#ff00ff"
+              : "inherit",
+            transition: "color 0.3s",
+          }}
+        >
+          {char}
+        </span>
+      ))}
+    </motion.a>
+  );
+}
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +116,7 @@ export function Navigation() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -84,7 +178,7 @@ export function Navigation() {
               <Instagram size={18} />
             </motion.a>
             <motion.a
-              href="https://soundcloud.com/caikedup"
+              href="https://soundcloud.com/caikin"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.1, rotate: -5 }}
@@ -136,22 +230,19 @@ export function Navigation() {
               className="h-full flex flex-col items-center justify-center gap-8"
             >
               {navLinks.map((link, i) => (
-                <motion.a
+                <ScrambleMenuItem
                   key={link.href}
                   href={link.href}
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + i * 0.1 }}
-                  onClick={() => setIsOpen(false)}
-                  className="text-3xl font-bold text-white hover:text-gradient-neon transition-all"
-                >
-                  {link.label}
-                </motion.a>
+                  label={link.label}
+                  index={i}
+                  isMenuOpen={isOpen}
+                  onClose={() => setIsOpen(false)}
+                />
               ))}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.6 }}
                 className="flex gap-6 mt-8"
               >
                 <a
@@ -163,7 +254,7 @@ export function Navigation() {
                   <Instagram size={24} />
                 </a>
                 <a
-                  href="https://soundcloud.com/caikedup"
+                  href="https://soundcloud.com/caikin"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-12 h-12 rounded-full glass flex items-center justify-center text-white hover:text-[#ff00ff]"

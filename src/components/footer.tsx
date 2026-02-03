@@ -92,6 +92,10 @@ function IceCube({ index, onMelt }: { index: number; onMelt: () => void }) {
             opacity="0.6"
           />
 
+          {/* Big Red X through the ice cube */}
+          <line x1="8" y1="8" x2="32" y2="38" stroke="#ff0000" strokeWidth="4" strokeLinecap="round" />
+          <line x1="32" y1="8" x2="8" y2="38" stroke="#ff0000" strokeWidth="4" strokeLinecap="round" />
+
           {/* Dripping water drops */}
           <motion.ellipse
             cx="20"
