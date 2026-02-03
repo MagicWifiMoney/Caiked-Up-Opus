@@ -304,7 +304,7 @@ export function Footer() {
             onClick={handleSecretClick}
             className="text-white/30 text-sm flex items-center gap-1 cursor-pointer hover:text-white/50 transition-colors select-none"
           >
-            Made with <Heart className="w-4 h-4 text-[#ff00ff] animate-pulse" /> in Minneapolis
+            Made with <Heart className="w-4 h-4 text-[#ff00ff] animate-pulse" /> by Giebz in Minneapolis
             {showIceCubes && <span className="ml-2 text-[#7dd3fc]">🧊 Stay cool! 🧊</span>}
           </p>
         </motion.div>
